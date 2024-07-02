@@ -278,6 +278,10 @@ bool LfgAcceptAction::Execute(Event event)
         //if (urand(0, 1 + 10 / sPlayerbotAIConfig->randomChangeMultiplier))
         //    return false;
 
+        // NOTE: By disabling this check, we let bots unconditionally accept the LFG queue request even if they aren't able to join at that moment.
+        // This might have potential side-effects, but when it comes to user experience, the dungeon instance starts up fine, with possibly some bots
+        // missing, but you can always enqueue for more and eventually they will fill the group in.
+#if 0
         if (bot->IsInCombat() || bot->isDead())
         {
             LOG_INFO("playerbots", "Bot {} {}:{} <{}> is in combat and refuses LFG proposal {}",
@@ -285,6 +289,7 @@ bool LfgAcceptAction::Execute(Event event)
             sLFGMgr->UpdateProposal(id, bot->GetGUID(), false);
             return true;
         }
+#endif
 
         LOG_INFO("playerbots", "Bot {} {}:{} <{}> accepts LFG proposal {}",
             bot->GetGUID().ToString().c_str(), bot->GetTeamId() == TEAM_ALLIANCE ? "A" : "H", bot->getLevel(), bot->GetName().c_str(), id);
