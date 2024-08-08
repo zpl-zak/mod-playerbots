@@ -652,6 +652,18 @@ std::string const PlayerbotHolder::ProcessBotCommand(std::string const cmd, Obje
     if (!bot)
         return "bot not found";
 
+    if (GET_PLAYERBOT_AI(bot)) {
+        if (Player* master = GET_PLAYERBOT_AI(bot)->GetMaster())
+        {
+            if (cmd == "init=blue" || cmd == "init=rare")
+            {
+                PlayerbotFactory factory(bot, master->GetLevel(), ITEM_QUALITY_RARE);
+                factory.Randomize(false);
+                return "ok";
+            }
+        }
+    }
+
     if (!isRandomAccount || isRandomBot)
     {
         return "ERROR: You can not use this command on non-summoned random bot.";
